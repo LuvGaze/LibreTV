@@ -1,0 +1,35 @@
+name: Build Push DockerHub
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        env:
+          DH_USER: ${{ secrets.DOCKER_USERNAME }}
+          DH_PWD: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo "${DH_PWD}" | docker login -u "${DH_USER}" --password-stdin
+
+      - name: Get commit short hash
+        id: meta
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push amd64 only
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: |
+            LuvGaze/libretv:latest
+            LuvGaze/libretv:sha-${{ steps.meta.outputs.sha_short }}
