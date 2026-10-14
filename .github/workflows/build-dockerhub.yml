@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  构建推送镜像:
+  build_push_image:
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码
