@@ -15,7 +15,7 @@ jobs:
         uses: docker/login-action@v4
         with:
           registry: ghcr.io
-          username: ${{ shturl.cc/CW }}
+          username: ${{ shturl.cc/VS }}
           password: ${{ github.token }}
 
       - name: 获取提交短哈希
