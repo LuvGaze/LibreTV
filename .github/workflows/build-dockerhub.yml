@@ -15,7 +15,7 @@ jobs:
         env:
           DH_USER: ${{ secrets.DOCKER_USERNAME }}
           DH_PWD: ${{ secrets.DOCKER_PASSWORD }}
-        run: printf "%s" "${DH_PWD}" | docker login -u "${DH_USER}" --password-stdin
+        run: printf "%s" "${DH_PWD}" | tr -d '\r' | docker login -u "${DH_USER}" --password-stdin
 
       - name: Get commit short hash (fixed 7 chars)
         id: meta
