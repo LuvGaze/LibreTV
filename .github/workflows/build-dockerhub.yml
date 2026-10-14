@@ -4,6 +4,10 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build_push_image:
     runs-on: ubuntu-latest
@@ -31,6 +35,9 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
+          # 缓存配置：读取旧缓存 + 构建完成保存全部层缓存
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: |
             ghcr.io/luvgaze/libretv:latest
             ghcr.io/luvgaze/libretv:sha-${{ steps.meta.outputs.sha_short }}
